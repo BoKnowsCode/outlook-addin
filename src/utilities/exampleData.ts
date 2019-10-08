@@ -1,12 +1,12 @@
 // derivative of reference code  for creating example data iwth  office-ui-fabric-react.
 
-const DATA = {    
+const DATA = {
   roomNames: [
-                '1st Floor - Engineering Conference Room', 
-                '2nd Floor - Conference Room (Services)', 
+                '1st Floor - Engineering Conference Room',
+                '2nd Floor - Conference Room (Services)',
                 '2nd Floor - Conference Room (Sales)'
               ],
-  available: ['true', 'false']  
+  available: ['true', 'false']
 };
 
 export interface IExampleItem {

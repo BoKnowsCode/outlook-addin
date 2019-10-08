@@ -9,7 +9,7 @@
   "config": {
     "app-to-debug": "outlook",
     "app-type-to-debug": "desktop",
-    "dev-server-port": 3000
+    "dev-server-port": 3003
   },
   "scripts": {
     "build": "webpack -p --mode production --https false",

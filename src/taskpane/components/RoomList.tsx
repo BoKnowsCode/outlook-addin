@@ -53,7 +53,7 @@ export default class RoomList extends React.Component<IRoomListProps, IRoomListS
     return h;
   }
 
-  private _onRenderCell = (item: IExampleItem): JSX.Element => {
+  private _onRenderCell = (item: IRoomProps): JSX.Element => {
     return (
       <div data-is-focusable={true}>
         <DetailedRoomButton roomInfo={item} />
