@@ -14,6 +14,7 @@ export interface AppProps {
 export interface AppState {
   listItems: HeroListItem[];
   bookedRoomDetails: HeroListItem[];
+  scheduleEventUrl: string;
   officeSettingsInitializationState: number; // quick hack - 0: unstarted 1: inprogress 2: done
   showIntro: boolean;
   showConfirmationScreen: boolean;
@@ -27,6 +28,7 @@ export default class App extends React.Component<AppProps, AppState> {
     this.state = {
       listItems: [],
       bookedRoomDetails: [],
+      scheduleEventUrl: '',
       officeSettingsInitializationState: 0,
       // can't set these accurately until isOfficeInitialized is true
       showIntro: true,
@@ -123,17 +125,24 @@ export default class App extends React.Component<AppProps, AppState> {
 
   renderConfirmationScreen() {
     return (
-      <div className='ms-welcome' style={{ alignItems: 'center' }}>
+      <div className='ms-welcome'>
         <Header logo='assets/logo-filled.png' title='' message='Success!' />
         <ConfirmationScreen
           message='You booked the following room in Astra Schedule'
           items={this.state.bookedRoomDetails}
           />
+        <main className='ms-welcome__main'>
+          <ul className="msms-List ms-welcome__features ms-u-slideUpIn10">
+            <li className='ms-ListItem'>
+              <i className="ms-Icon ms-Icon--ForwardEvent"></i>&nbsp;<a className="ms-font-m ms-fontColor-neutralPrimary" href={this.state.scheduleEventUrl}>Open Event in Astra Schedule</a>
+            </li>
+          </ul>
+        </main>
       </div>
     );
   }
 
-  onBookRoomSuccessful = (roomName, eventDay, eventStart, eventEnd) => {
+  onBookRoomSuccessful = (roomName, eventDay, eventStart, eventEnd, scheduleEventUrl) => {
     this.setState({
       showConfirmationScreen: true,
       bookedRoomDetails: [
@@ -149,7 +158,8 @@ export default class App extends React.Component<AppProps, AppState> {
           icon: 'Clock',
           primaryText: `${eventStart} to ${eventEnd}`
         },
-      ]
+      ],
+      scheduleEventUrl: scheduleEventUrl
     });
   }
 

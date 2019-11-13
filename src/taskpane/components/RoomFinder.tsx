@@ -165,17 +165,30 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
     console.log(`ignoring parameters (not needed): ${startTime} - ${endTime}`);
     // /?start=${startTime}&end=${endTime}
     try {
-      const postBody = JSON.stringify({
-        'name': 'Outlook Add-In Test Event',
-        'userName': 'Bo Forrester',
-        'userEmail': 'bforrester@aais.com',
-        'start': moment(this.state.startTime).format('YYYY-MM-DD HH:mm'),
-        'end': moment(this.state.endTime).format('YYYY-MM-DD HH:mm'),
-      });
+      //console.log(`OUTLOOK organizer: ${JSON.stringify(Office.context.mailbox.item.organizer, null, 2)}`);
+      //console.log(`OUTLOOK subject: ${JSON.stringify(Office.context.mailbox.item.subject, null, 2)}`);
 
+      //const meetingSubject = Office.context.mailbox.item.subject ? Office.context.mailbox.item.subject : `Event Booked via Outlook`;
+      const postBody = {
+        name: 'Event Booked via Outlook',
+        userName: 'Outlook User',
+        userEmail: 'NOREPLY@ACHE.edu',
+        start: moment(this.state.startTime).format('YYYY-MM-DD HH:mm'),
+        end: moment(this.state.endTime).format('YYYY-MM-DD HH:mm'),
+      };
+
+      console.log(`POST URL:   ${url}`);
       console.log(`POST BODY:   ${JSON.stringify(postBody, null, 2)}`);
 
-      await axios.post(url, postBody);
+      const postResponse = await axios.post(url, postBody);
+      console.log(`POST REPONSE: ${JSON.stringify(postResponse, null, 2)}`);
+
+      // set event url to postResponse.data.eventId
+      const eventId = postResponse.data.eventId;
+      const astraScheduleInstanceUrl = `https://www.aaiscloud.com/ARCHealthEducation`;
+      const astraScheduleEventUrl = `${astraScheduleInstanceUrl}/events/EventForm.aspx?id=${eventId}`;
+      // https://www.aaiscloud.com/ARCHealthEducation/events/EventForm.aspx?id=311ed6cc-5570-44cc-b476-d71af718e76d
+
       that.setState({
         ...that.state,
         isBooking: false,
@@ -187,6 +200,7 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
         moment(this.state.startTime).format('dddd, MMMM Do YYYY'),
         moment(this.state.startTime).format('LT'),
         moment(this.state.endTime).format('LT'),
+        astraScheduleEventUrl,
       ); // Call injected onBookRoomSuccessful callback
     } catch (error) {
       that.setState({isBooking: false});
