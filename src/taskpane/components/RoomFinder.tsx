@@ -161,19 +161,26 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
   bookRoomOnServer = async (roomInfo, startTime, endTime) => {
     var that = this;
     this.setState({isBooking: true});
-    console.log(`${startTime} - ${endTime}`);
-    //var url = `${this.props.apiBasePath}/spaces/rooms/${roomInfo.roomId}/reservation/?start=${startTime}&end=${endTime}`;
+    var url = `${this.props.apiBasePath}/spaces/rooms/${roomInfo.roomId}/reservation`;
+    console.log(`ignoring parameters (not needed): ${startTime} - ${endTime}`);
+    // /?start=${startTime}&end=${endTime}
     try {
-      //throw new Error('Not yet implemented');
+      const postBody = JSON.stringify({
+        'name': 'Outlook Add-In Test Event',
+        'userName': 'Bo Forrester',
+        'userEmail': 'bforrester@aais.com',
+        'start': moment(this.state.startTime).format('YYYY-MM-DD HH:mm'),
+        'end': moment(this.state.endTime).format('YYYY-MM-DD HH:mm'),
+      });
 
-      /*
-      await axios.get(url);
+      console.log(`POST BODY:   ${JSON.stringify(postBody, null, 2)}`);
+
+      await axios.post(url, postBody);
       that.setState({
         ...that.state,
         isBooking: false,
         hasError: false,
       });
-      */
       that.addRoomToMeeting(roomInfo.roomBuildingAndNumber);
       this.props.onBookRoomSuccessful(
         roomInfo.roomBuildingAndNumber,
