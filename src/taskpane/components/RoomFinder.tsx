@@ -158,57 +158,62 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
     }, 4000)
   }
 
-  bookRoomOnServer = async (roomInfo, startTime, endTime) => {
+  bookRoomOnServer = async (roomInfo, _startTime, _endTime) => {
     var that = this;
     this.setState({isBooking: true});
     var url = `${this.props.apiBasePath}/spaces/rooms/${roomInfo.roomId}/reservation`;
-    console.log(`ignoring parameters (not needed): ${startTime} - ${endTime}`);
-    // /?start=${startTime}&end=${endTime}
+
+    const start = moment(this.state.startTime).format('YYYY-MM-DD HH:mm');
+    const end = moment(this.state.endTime).format('YYYY-MM-DD HH:mm');
+    let name = 'Event Booked via Outlook';
+    let userName = 'Outlook User';
+    let userEmail = 'noreply@aais.com';
+
     try {
-      //console.log(`OUTLOOK organizer: ${JSON.stringify(Office.context.mailbox.item.organizer, null, 2)}`);
-      //console.log(`OUTLOOK subject: ${JSON.stringify(Office.context.mailbox.item.subject, null, 2)}`);
+      Office.context.mailbox.item.organizer.getAsync((asyncResult) => {
+        if (asyncResult.value.displayName) { userName = asyncResult.value.displayName; }
+        if (asyncResult.value.emailAddress) { userEmail = asyncResult.value.emailAddress; }
+        
+        Office.context.mailbox.item.subject.getAsync(async (asyncResult) => {
+          if (asyncResult.value && asyncResult.value.length > 0) {
+            name = `${asyncResult.value} (via Outlook)`;
+          }
 
-      //const meetingSubject = Office.context.mailbox.item.subject ? Office.context.mailbox.item.subject : `Event Booked via Outlook`;
-      const postBody = {
-        name: 'Event Booked via Outlook',
-        userName: 'Outlook User',
-        userEmail: 'NOREPLY@ACHE.edu',
-        start: moment(this.state.startTime).format('YYYY-MM-DD HH:mm'),
-        end: moment(this.state.endTime).format('YYYY-MM-DD HH:mm'),
-      };
+          const postBody = { name, userName, userEmail, start, end };
 
-      console.log(`POST URL:   ${url}`);
-      console.log(`POST BODY:   ${JSON.stringify(postBody, null, 2)}`);
-
-      const postResponse = await axios.post(url, postBody);
-      console.log(`POST REPONSE: ${JSON.stringify(postResponse, null, 2)}`);
-
-      // set event url to postResponse.data.eventId
-      const eventId = postResponse.data.eventId;
-      const astraScheduleInstanceUrl = `https://www.aaiscloud.com/ARCHealthEducation`;
-      const astraScheduleEventUrl = `${astraScheduleInstanceUrl}/events/EventForm.aspx?id=${eventId}`;
-      // https://www.aaiscloud.com/ARCHealthEducation/events/EventForm.aspx?id=311ed6cc-5570-44cc-b476-d71af718e76d
-
-      that.setState({
-        ...that.state,
-        isBooking: false,
-        hasError: false,
+          console.log(`POST URL:   ${url}`);
+          console.log(`POST BODY:   ${JSON.stringify(postBody, null, 2)}`);
+    
+          const postResponse = await axios.post(url, postBody);
+          console.log(`POST REPONSE: ${JSON.stringify(postResponse, null, 2)}`);
+    
+          // set event url to postResponse.data.eventId
+          const eventId = postResponse.data.eventId;
+          const astraScheduleInstanceUrl = `https://www.aaiscloud.com/ARCHealthEducation`;
+          const astraScheduleEventUrl = `${astraScheduleInstanceUrl}/events/EventForm.aspx?id=${eventId}`;
+          // https://www.aaiscloud.com/ARCHealthEducation/events/EventForm.aspx?id=311ed6cc-5570-44cc-b476-d71af718e76d
+    
+          that.setState({
+            ...that.state,
+            isBooking: false,
+            hasError: false,
+          });
+          that.addRoomToMeeting(roomInfo.roomBuildingAndNumber);
+          this.props.onBookRoomSuccessful(
+            roomInfo.roomBuildingAndNumber,
+            moment(this.state.startTime).format('dddd, MMMM Do YYYY'),
+            moment(this.state.startTime).format('LT'),
+            moment(this.state.endTime).format('LT'),
+            astraScheduleEventUrl,
+          ); // Call injected onBookRoomSuccessful callback
+        });  
       });
-      that.addRoomToMeeting(roomInfo.roomBuildingAndNumber);
-      this.props.onBookRoomSuccessful(
-        roomInfo.roomBuildingAndNumber,
-        moment(this.state.startTime).format('dddd, MMMM Do YYYY'),
-        moment(this.state.startTime).format('LT'),
-        moment(this.state.endTime).format('LT'),
-        astraScheduleEventUrl,
-      ); // Call injected onBookRoomSuccessful callback
     } catch (error) {
       that.setState({isBooking: false});
       this.setState({hasError: true});
       console.log(error);
-      // temporarily still add room (so demo doesn't suck)
-      that.addRoomToMeeting(roomInfo.roomBuildingAndNumber);
 
+      that.addRoomToMeeting(roomInfo.roomBuildingAndNumber);
     }
   }
 
@@ -231,7 +236,7 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
       return (
         <Stack grow>
           <Stack verticalAlign="center" styles={stackStyles}>
-            <Spinner size={SpinnerSize.large} label="Loading room data" ariaLive="assertive" labelPosition="right" />
+            <Spinner size={SpinnerSize.large} label="Loading Available Rooms" ariaLive="assertive" labelPosition="right" />
           </Stack>
         </Stack>
       )
@@ -240,7 +245,7 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
       return (
         <Stack grow>
           <Stack verticalAlign="center" styles={stackStyles}>
-            <Spinner size={SpinnerSize.large} label="Reserving room in Ad Astra" ariaLive="assertive" labelPosition="right" />
+            <Spinner size={SpinnerSize.large} label="Reserving Room in Ad Astra" ariaLive="assertive" labelPosition="right" />
           </Stack>
         </Stack>
       )
