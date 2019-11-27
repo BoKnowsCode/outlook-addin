@@ -1,10 +1,6 @@
 import * as React from 'react';
-import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { ContextualMenu } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Slider } from 'office-ui-fabric-react/lib/Slider';
-import { WELCOME_SCREEN_SETTTING } from '../../utilities/config';
-import { SELECTED_ROOM_SETTING } from '../../utilities/config';
+import { Dialog, DialogType, DialogFooter, ContextualMenu, Link, Slider } from 'office-ui-fabric-react';
+import { WELCOME_SCREEN_SETTTING, SELECTED_ROOM_SETTING } from '../../utilities/config';
 
 export interface ISettingsDialogStates {
   hideDialog: boolean;

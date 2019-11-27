@@ -1,12 +1,19 @@
 import * as React from 'react';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import RoomList from './RoomList';
 import axios from 'axios';
-import { Spinner, SpinnerSize, PrimaryButton, ButtonType } from 'office-ui-fabric-react';
-import { Stack, IStackStyles } from 'office-ui-fabric-react/lib/Stack';
-import * as moment from 'moment';
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import {
+  Spinner,
+  SpinnerSize,
+  PrimaryButton,
+  ButtonType,
+  Stack,
+  IStackStyles,
+  // SearchBox,
+  Toggle,
+  MessageBar,
+  MessageBarType 
+} from 'office-ui-fabric-react';
+import moment from 'moment';
 import { createListItems } from '../../utilities/exampleData';
 import SettingsDialog from './SettingsDialog';
 import { SELECTED_ROOM_SETTING } from '../../utilities/config';
@@ -261,7 +268,7 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
                       }}
         >
           <SettingsDialog ref={this.state.settingsDialog} />
-          <div className="ms-SearchBoxExample" style={{borderColor: 'rgba(237, 235, 233, 1)'}}>
+          {/* <div className="ms-SearchBoxExample" style={{borderColor: 'rgba(237, 235, 233, 1)'}}>
             <SearchBox
               placeholder="Search by Ad Astra room name"
               onSearch={newValue => console.log('value is ' + newValue)}
@@ -269,7 +276,7 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
               onBlur={() => console.log('onBlur called')}
               onChange={() => console.log('onChange called')}
             />
-          </div>
+          </div> */}
           <div style={{ marginTop: '13px', marginBottom: '5px' }} >
               <Toggle
                 defaultChecked={!this.state.showUnavailable}

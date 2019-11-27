@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
-import { List } from 'office-ui-fabric-react/lib/List';
+import { FocusZone, FocusZoneDirection, List, ITheme, mergeStyleSets, getTheme, getFocusStyle } from 'office-ui-fabric-react';
 import { DetailedRoomButton, ISourceRoomInfo } from './DetailedRoomButton';
-import { ITheme, mergeStyleSets, getTheme, getFocusStyle } from 'office-ui-fabric-react/lib/Styling';
 import { SELECTED_ROOM_SETTING } from '../../utilities/config';
 
 export interface IRoomListProps {
