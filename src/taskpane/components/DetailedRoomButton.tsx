@@ -32,7 +32,6 @@ export class DetailedRoomButton extends React.Component<IRoomButtonProps, IRoomB
   public render() {
     return (
       <CompoundButton
-        id={`select-room-${this.props.roomInfo.roomId}`}
         {...this.props}
         checked={this.state.selected}
         allowDisabledFocus
