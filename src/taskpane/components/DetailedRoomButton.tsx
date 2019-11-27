@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { CompoundButton, IButtonProps } from 'office-ui-fabric-react';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Icon } from 'office-ui-fabric-react';
 
 // note: this should match to server definition
 export interface ISourceRoomInfo {
@@ -31,8 +31,8 @@ export class DetailedRoomButton extends React.Component<IRoomButtonProps, IRoomB
 
   public render() {
     return (
-      // alignItems: 'start', textAlign: 'left', justifyContent: 'left'
       <CompoundButton
+        id={`select-room-${this.props.roomInfo.roomId}`}
         {...this.props}
         checked={this.state.selected}
         allowDisabledFocus

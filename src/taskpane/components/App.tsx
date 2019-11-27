@@ -4,8 +4,7 @@ import Header from './Header';
 import HeroList, { HeroListItem } from './HeroList';
 import ConfirmationScreen from './ConfirmationScreen';
 import RoomFinder from './RoomFinder';
-import { WELCOME_SCREEN_SETTTING } from '../../utilities/config';
-import { getDefaultSettings} from '../../utilities/config';
+import { WELCOME_SCREEN_SETTTING, getDefaultSettings } from '../../utilities/config';
 
 export interface AppProps {
   isOfficeInitialized: boolean;
@@ -43,8 +42,8 @@ export default class App extends React.Component<AppProps, AppState> {
     const defaults = getDefaultSettings();
 
     let showWelcome = Office.context.roamingSettings.get(WELCOME_SCREEN_SETTTING);
-    let useDemoData = undefined; // no longer loading this from settings - it's problematic for updating customer's add-in seamlessly
-    let apiPath = undefined; // no longer loading this from settings - it's problematic for updating customer's add-in seamlessly
+    let useDemoData; // no longer loading this from settings - it's problematic for updating customer's add-in seamlessly
+    let apiPath; // no longer loading this from settings - it's problematic for updating customer's add-in seamlessly
     let showIntro = true;
 
     if (showWelcome === undefined) {

@@ -1,7 +1,7 @@
 import 'office-ui-fabric-react/dist/css/fabric.min.css';
 import App from './components/App';
 import { AppContainer } from 'react-hot-loader';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import { initializeIcons } from 'office-ui-fabric-react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
